@@ -1,0 +1,13 @@
+{
+  "name": "LendBit-Automate-Checker",
+  "dependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.6",
+    "ethers": "^5.6.9"
+  },
+  "version": "1.0.0",
+  "description": "For automation in the lendbit protocol",
+  "main": "index.js",
+  "author": "PhantomOz <faniogor@gmail.com>",
+  "license": "MIT",
+  "private": true
+}
