@@ -10,6 +10,7 @@ struct Request {
     uint256 returnDate;
     address lender;
     address loanRequestAddr;
+    address[] collateralTokens; // Addresses of collateral tokens
     Status status;
 }
 
@@ -23,4 +24,17 @@ interface IProtocol {
     function getHealthFactor(address _user) external view returns (uint8);
     function getAllRequest() external view returns (Request[] memory);
     function handleLiquidationRequest(address _user) external;
+    function getRequestToColateral(
+        uint96 _requestId,
+        address _token
+    ) external view returns (uint256);
+    function getUsdValue(
+        address _token,
+        uint256 _amount,
+        uint8 _decimal
+    ) external view returns (uint256);
+}
+
+interface IERC20 {
+    function decimals() external view returns (uint8);
 }
