@@ -49,7 +49,7 @@ contract ProtocolChecker {
             );
         }
 
-        _factor = (_collateralTokenInusd * 10E18) / _loanRepaymentInUsd;
+        _factor = (_collateralTokenInusd * 1E18) / _loanRepaymentInUsd;
     }
 
     function checker(
@@ -58,15 +58,17 @@ contract ProtocolChecker {
         Request[] memory requests = getServicedRequest(_protocol);
 
         for (uint i = 0; i < requests.length; i++) {
-            address _user = requests[i].author;
-            uint8 _healthFactor = IProtocol(_protocol).getHealthFactor(_user);
-
-            execPayload = abi.encodeWithSelector(
-                IProtocol.handleLiquidationRequest.selector,
-                _user
+            uint256 _healthFactor = _getRequestHealthFactor(
+                requests[i],
+                _protocol
             );
 
-            if (_healthFactor < 1) {
+            execPayload = abi.encodeWithSelector(
+                IProtocol.liquidateUserRequest.selector,
+                requests[i].requestId
+            );
+
+            if ((_healthFactor / 1E18) < 1) {
                 return (true, execPayload);
             }
         }

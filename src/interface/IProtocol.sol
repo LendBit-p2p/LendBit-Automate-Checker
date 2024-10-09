@@ -23,7 +23,7 @@ enum Status {
 interface IProtocol {
     function getHealthFactor(address _user) external view returns (uint8);
     function getAllRequest() external view returns (Request[] memory);
-    function handleLiquidationRequest(address _user) external;
+    function liquidateUserRequest(uint96 requestId) external;
     function getRequestToColateral(
         uint96 _requestId,
         address _token
