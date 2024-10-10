@@ -61,8 +61,8 @@ contract ProtocolChecker {
         }
 
         _factor =
-            (_collateralTokenInusd * 1E18) /
-            ((_loanRepaymentInUsd * 85) / 100);
+            (_collateralTokenInusd * 1E18 * 85) /
+            (_loanRepaymentInUsd * 100);
     }
 
     function checker(
