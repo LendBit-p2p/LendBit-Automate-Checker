@@ -9,6 +9,7 @@ contract MockProtocol is IProtocol {
     mapping(uint96 => mapping(address => uint256)) private collateralMapping;
 
     function createRequest(
+        address _loanAddress,
         uint256 _amount,
         uint16 _interest,
         uint256 _totalRepayment,
@@ -25,7 +26,7 @@ contract MockProtocol is IProtocol {
             totalRepayment: _totalRepayment,
             returnDate: _returnDate,
             lender: address(0),
-            loanRequestAddr: address(this),
+            loanRequestAddr: _loanAddress,
             collateralTokens: _collateralTokens,
             status: _status
         });

@@ -8,11 +8,20 @@ contract ProtocolChecker {
         address _protocol
     ) internal view returns (Request[] memory servicedRequest) {
         Request[] memory allRequests = IProtocol(_protocol).getAllRequest();
-        uint256 servicedRequestlen = servicedRequest.length;
+        uint256 servicedRequestlen = 0;
+
         for (uint i = 0; i < allRequests.length; i++) {
             if (allRequests[i].status == Status.SERVICED) {
-                servicedRequest[servicedRequestlen] = allRequests[i];
                 servicedRequestlen++;
+            }
+        }
+
+        servicedRequest = new Request[](servicedRequestlen);
+
+        for (uint i = 0; i < allRequests.length; i++) {
+            if (allRequests[i].status == Status.SERVICED) {
+                servicedRequest[servicedRequestlen - 1] = allRequests[i];
+                servicedRequestlen--;
             }
         }
     }
@@ -24,6 +33,7 @@ contract ProtocolChecker {
         address[] memory _collateralTokens = _request.collateralTokens;
         uint256 _loanRepayment = _request.totalRepayment;
         address _borrowedToken = _request.loanRequestAddr;
+
         uint8 _borrowedTokenDecimal = IERC20(_borrowedToken).decimals();
 
         uint256 _loanRepaymentInUsd = IProtocol(_protocol).getUsdValue(
@@ -36,6 +46,7 @@ contract ProtocolChecker {
 
         for (uint8 i = 0; i < _collateralTokens.length; i++) {
             uint8 _collateralDecimal = IERC20(_collateralTokens[i]).decimals();
+
             uint256 _collateralAmount = IProtocol(_protocol)
                 .getRequestToColateral(
                     _request.requestId,
@@ -49,7 +60,9 @@ contract ProtocolChecker {
             );
         }
 
-        _factor = (_collateralTokenInusd * 1E18) / _loanRepaymentInUsd;
+        _factor =
+            (_collateralTokenInusd * 1E18) /
+            ((_loanRepaymentInUsd * 85) / 100);
     }
 
     function checker(
